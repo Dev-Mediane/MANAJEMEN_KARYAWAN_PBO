@@ -1,4 +1,5 @@
 package ManajemenKaryawan;
+import java.text.ParseException;
 import java.util.Date;
 
 /**
@@ -12,7 +13,8 @@ public class PenghasilanKaryawan
     private Date jamSelesaiKerja;
     private String statusKerja;
     private int jumlahHariKerja;
-    private int lamaWaktuKerja;
+    private double lamaWaktuKerja;
+    private int selisihJam, selisihMenit;
 
     int penghasilanPerJam(String statusKerja)
     {
@@ -45,7 +47,7 @@ public class PenghasilanKaryawan
         else {return 0;}
     }
 
-    int calculate(AkunKaryawan dataAkunKaryawan)
+    int calculate(AkunKaryawan dataAkunKaryawan) throws ParseException
     {
         // Isi = data jadwal kerja yang diproses oleh karyawan
         this.jamMulaiKerja = dataAkunKaryawan.getDataJadwalKerjaKaryawan().getJamMulaiKerja();
@@ -54,9 +56,15 @@ public class PenghasilanKaryawan
         this.jumlahHariKerja = dataAkunKaryawan.getDataJadwalKerjaKaryawan().getJumlahHariKerja();
 
         // perbedaan jam mulai kerja dan jam selesai kerja
+        double timeDifference01 = this.jamSelesaiKerja.getTime() - this.jamMulaiKerja.getTime();
 
-        this.totalPenghasilan = this.lamaWaktuKerja * this.jumlahHariKerja * penghasilanPerJam(statusKerja);
-        return this.totalPenghasilan; // belum selesai
+        selisihJam = (int) Math.floor(timeDifference01 / 3600000); double timeDifference02 = timeDifference01 % 3600000;
+        selisihMenit = (int) Math.floor(timeDifference02 / 60000);
+
+        this.lamaWaktuKerja = selisihJam + (selisihMenit / 60);
+
+        this.totalPenghasilan = (int) (this.lamaWaktuKerja * this.jumlahHariKerja * penghasilanPerJam(statusKerja));
+        return this.totalPenghasilan;
     }
 
     void display(AkunKaryawan dataAkunKaryawan)

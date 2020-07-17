@@ -11,14 +11,6 @@ import ManajemenKaryawan.*;
  * Aplikasi utama untuk "Manajemen Karyawan"
  */
 
-/**
- * @author
- * Albert Cenderawan
- * Harris Siaputra
- * Hubert Daniel Rusli
- * Wilbert Khosasi
- */
-
 public class App {
     static Registrasi dataRegistrasi;
     static AkunKaryawan dataAkunKaryawan;
@@ -91,13 +83,13 @@ public class App {
     {
         // Belum Selesai (by 03082190015)
         String strNomorID = " ", strPassword = " ", strConfirmPassword = " ";
-        System.out.println("====================");
+        System.out.println("=======================================");
         System.out.println("1 >> Sign In \n");
 
         while (true)
         {
-            System.out.print("Employee ID      = "); strNomorID = InputValue.nextLine();
-            System.out.print("Password         = "); strPassword = InputValue.nextLine();
+            System.out.print("Employee ID = "); strNomorID = InputValue.nextLine();
+            System.out.print("Password    = "); strPassword = InputValue.nextLine();
             System.out.print("Confirm Password = "); strConfirmPassword = InputValue.nextLine(); System.out.println();
 
             if (!strConfirmPassword.equals(strPassword)) {
@@ -106,30 +98,62 @@ public class App {
                 
             }
             else if (strConfirmPassword.equals(strPassword)) {
-                dataRegistrasi = new Registrasi(strNomorID.toCharArray(), strPassword.toCharArray());
-                Database.append(dataRegistrasi);
-                break;
+
+                System.out.print("Ingin menambah akun baru? "); String konfirmasi = InputValue.nextLine(); System.out.println();
+                if (konfirmasi.equals("ya") || konfirmasi.equals("yes"))
+                {
+                    dataRegistrasi = new Registrasi(strNomorID.toCharArray(), strPassword.toCharArray());
+                    Database.append(dataRegistrasi);
+                    break;
+                }
+                else if (konfirmasi.equals("tidak") || konfirmasi.equals("no"))
+                {
+                    System.out.println("---------------------------------------");
+                    System.out.println("i >> Cancelled");
+                    System.out.println("Akun yang diinput BATAL disimpan.");
+                    System.out.println("Silakan mendaftarkan akun baru kembali."); 
+                    System.out.println("--------------------------------------- \n");
+                    osSystem_Pause(); main(argumentsList); break;
+                }
             }
         }
 
-        if (strNomorID.substring(0, 2).equals("01"))
+        if (strNomorID.substring(0, 2).equals("01")) // diinput sebagai karyawan
         {
-            dataAkunKaryawan = new AkunKaryawan();
-            Database.append(dataAkunKaryawan);
+            dataAkunKaryawan = new AkunKaryawan();      // membuat objek karyawan
+            Database.append(dataAkunKaryawan);          // memasukkan data ke database
+
+            dataAkunKaryawan.getDataRegistrasi().setNomorID(strNomorID.toCharArray());
+            dataAkunKaryawan.getDataRegistrasi().setPassword(strPassword.toCharArray());
             
-            System.out.println("Status >> Employee (Karyawan)");
+            System.out.println("---------------------------------");
+            System.out.println("i >> Received");
+            System.out.println("Status Anda = EMPLOYEE (Karyawan)");
+            System.out.println("--------------------------------- \n");
         }
-        else if (strNomorID.substring(0, 2).equals("02"))
+        else if (strNomorID.substring(0, 2).equals("02")) // diinput sebagai administrator
         {
             dataAkunAdministator = new AkunAdministrator();
             Database.append(dataAkunAdministator);
 
-            System.out.println("Status >> Administrator (Admin)");
+            dataAkunAdministator.getDataRegistrasi().setNomorID(strNomorID.toCharArray());
+            dataAkunAdministator.getDataRegistrasi().setPassword(strPassword.toCharArray());
+
+            System.out.println("-----------------------------------");
+            System.out.println("i >> Received");
+            System.out.println("Status Anda = ADMINISTRATOR (Admin)");
+            System.out.println("----------------------------------- \n");
         }
 
+        osSystem_Pause();
+        System.out.println("-------------------------");
         System.out.println("Data Anda telah terkirim.");
         System.out.println("Silakan Log In akun Anda.");
+        System.out.println("------------------------- \n");
+
+        osSystem_Pause();
         System.out.println("========================= \n");
+
         main(argumentsList);
     }
 
@@ -144,16 +168,20 @@ public class App {
             System.out.println("2 >> Log In \n");
 
             System.out.print("Employee ID = "); strNomorID = InputValue.nextLine();
-            System.out.print("Password    = "); strPassword = InputValue.nextLine(); System.out.println();
+            System.out.print("Password    = "); strPassword = InputValue.nextLine();
 
-            if (!nomorID_isExist(strNomorID) || !password_isExist(strPassword)) {
+            if (!nomorID_isExist(strNomorID) || !password_isExist(strPassword)) 
+            {
+                System.out.println("----------------------------------");
+                System.out.println("i >> Warning");
                 System.out.println("Incorrect employee ID or password.");
+                System.out.println("---------------------------------- \n");
             }
 
             if (nomorID_isExist(strNomorID) && password_isExist(strPassword)) 
-            { 
-                System.out.println("==================== \n");
-                break;
+            {
+                System.out.println("=================================== \n");
+                osSystem_Pause(); break;
             }
             System.out.println();
         }
