@@ -10,10 +10,10 @@ public class JadwalKerjaAdmin
     private Date jamMulaiKerja;
     private Date jamSelesaiKerja;
     private String statusKerja;
-    private int jumlahHariKerja;
+    private Integer jumlahHariKerja;
 
     public JadwalKerjaAdmin(){}
-    public JadwalKerjaAdmin(Date jamMulaiKerja, Date jamSelesaiKerja, String statusKerja, int jumlahHariKerja)
+    public JadwalKerjaAdmin(Date jamMulaiKerja, Date jamSelesaiKerja, String statusKerja, Integer jumlahHariKerja)
     {
         this.jamMulaiKerja = jamMulaiKerja;
         this.jamSelesaiKerja = jamSelesaiKerja;
@@ -33,7 +33,7 @@ public class JadwalKerjaAdmin
         this.statusKerja = statusKerja;
     }
 
-    public void setJumlahHariKerja(int jumlahHariKerja) {
+    public void setJumlahHariKerja(Integer jumlahHariKerja) {
         this.jumlahHariKerja = jumlahHariKerja;
     }
 
@@ -49,7 +49,7 @@ public class JadwalKerjaAdmin
         return this.statusKerja;
     }
 
-    public int getJumlahHariKerja() {
+    public Integer JumlahHariKerja() {
         return this.jumlahHariKerja;
     }
 }
