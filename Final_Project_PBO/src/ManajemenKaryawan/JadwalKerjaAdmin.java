@@ -49,7 +49,7 @@ public class JadwalKerjaAdmin
         return this.statusKerja;
     }
 
-    public Integer JumlahHariKerja() {
+    public Integer getJumlahHariKerja() {
         return this.jumlahHariKerja;
     }
 }
