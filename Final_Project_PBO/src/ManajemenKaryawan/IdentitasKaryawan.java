@@ -9,10 +9,10 @@ public class IdentitasKaryawan {
 	private String namaLengkap;
 	private char[] nomorHP = new char[12];
 	private	String email;
-	private int kendaraan;
+	private Integer kendaraan;
 	
 	public IdentitasKaryawan(){}
-	public IdentitasKaryawan(String namaLengkap, char[] nomorHP, String email, int kendaraan) {
+	public IdentitasKaryawan(String namaLengkap, char[] nomorHP, String email, Integer kendaraan) {
 	this.namaLengkap = namaLengkap;
 	this.nomorHP = nomorHP;
 	this.email = email;
@@ -44,10 +44,10 @@ public class IdentitasKaryawan {
 	}
 	
 	// method kendaraan
-	public int getkendaraan() {
+	public Integer getkendaraan() {
 		return kendaraan;
 	}
-	public void setkendaraan(int kendaraan) {
+	public void setkendaraan(Integer kendaraan) {
 		this.kendaraan = kendaraan;
 	}	
 }
