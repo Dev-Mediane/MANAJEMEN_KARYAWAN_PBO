@@ -19,6 +19,9 @@ public class MenuAdministrator
     {
         try
         {
+            /**
+             * ini adalah menu administrator 
+             */
             System.out.println("---------------------------------------------------");
             System.out.println("Welcome to Administrator Menu, " + String.copyValueOf(dataAkunAdministrator.getDataRegistrasi().getNomorID()) + "!");
             System.out.println("---------------------------------------------------");
@@ -125,10 +128,19 @@ public class MenuAdministrator
             // keluar dari akun admin
             LogOut();
         }
+        else
+        {
+            System.out.println("==================================================");
+            System.out.println("Maaf, input Anda tidak sesuai dengan pilihan Menu.");
+            System.out.println("Silakan kembali ke halaman menu Administrator.    ");
+            System.out.println("================================================== \n");
+            App.osSystem_Pause(); System.out.println(); interfaceMenu();
+        }
     }
 
     static void inputIdentitas()
     {
+        // Guna = input identitas admin
         System.out.println("1 >> Input Identitas");
         System.out.println("-------------------- \n");
 
@@ -136,17 +148,19 @@ public class MenuAdministrator
         System.out.print("Nomor HP      = "); String inputNomorHP = InputValue.nextLine();
         System.out.print("E-mail        = "); String inputEmail = InputValue.nextLine(); System.out.println();
 
+        // Data akan ditransfer ke Database.java
         dataAkunAdministrator.setDataIdentitasAdmin(new IdentitasAdmin(inputNamaLengkap, inputNomorHP, inputEmail));
-        App.osSystem_Pause();
+        App.osSystem_Pause(); System.out.println();
     }
 
     static void inputJamKerja()
     {
+        // Guna = input jam kerja yang disusun admin
         try
         {
             // SimpleDateFormat.class
             // Fungsi = menentukan format pada Date (misalnya format jam, menit, detik) sesuai keinginan user
-            SimpleDateFormat sdf = new SimpleDateFormat("hh:mm");
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 
             String inputJamMulaiKerja, inputJamSelesaiKerja, statusKerja = ""; int inputJumlahHariKerja;
 
@@ -158,21 +172,25 @@ public class MenuAdministrator
                 // Beri ketentuan format: Bila tidak sesuai dengan format jam tersebut, user tidak dapat lanjut
                 System.out.println("====================================================");
                 System.out.println("i << Attention - Formatting");
-                System.out.println("Format jam = (hh:mm). Misalnya 09:55");
+                System.out.println("Format jam = (hh:mm). Misalnya 07:08");
                 System.out.println("====================================================");
-                App.osSystem_Pause();
+                App.osSystem_Pause(); System.out.println();
 
-                System.out.print("Jumlah hari kerja         = "); inputJumlahHariKerja = InputValue.nextInt();  // Masukkan jumlah hari kerja dalam sebulan
+                System.out.print("Jumlah hari kerja (per Bulan) = "); inputJumlahHariKerja = InputValue.nextInt();  // Masukkan jumlah hari kerja dalam sebulan
                 InputValue.nextLine();
                 
-                System.out.print("Jam mulai kerja (hh:mm)   = "); inputJamMulaiKerja = InputValue.nextLine();   // Masukkan jam berapa mulai kerja
-                System.out.print("Jam selesai kerja (hh:mm) = "); inputJamSelesaiKerja = InputValue.nextLine(); // Masukkan jam berapa selesai kerja
+                System.out.print("Jam mulai kerja (hh:mm)       = "); inputJamMulaiKerja = InputValue.nextLine();   // Masukkan jam berapa mulai kerja
+                System.out.print("Jam selesai kerja (hh:mm)     = "); inputJamSelesaiKerja = InputValue.nextLine(); // Masukkan jam berapa selesai kerja
+                System.out.println();
 
                 // Bila data hh:mm dari user TIDAK SESUAI dengan format, maka user tidak bisa lanjut
                 if (inputJamMulaiKerja.charAt(2) != ':' || inputJamSelesaiKerja.charAt(2) != ':')
                 {
+                    System.out.println("------------------------------------------------");
                     System.out.println("Input Anda memiliki kesalahan format.");
-                    System.out.println("Baca \"Attention\" sebelum menginput data waktu."); App.osSystem_Pause();
+                    System.out.println("Baca \"Attention\" sebelum menginput data waktu."); 
+                    System.out.println("------------------------------------------------ \n"); 
+                    App.osSystem_Pause(); System.out.println();
                 }
 
                 // bila data hh:mm dari user SESUAI dengan format, maka user bisa lanjut
@@ -185,7 +203,7 @@ public class MenuAdministrator
             Date jamMulaiKerja = sdf.parse(inputJamMulaiKerja);          // ubah data String -> Date
             Date jamSelesaiKerja = sdf.parse(inputJamSelesaiKerja);      // ubah data String -> Date
 
-            App.osSystem_Pause();
+            App.osSystem_Pause(); System.out.println();
             System.out.println("=============================================");
             System.out.println("1. Full Time  [Kerja tetap]                  ");
             System.out.println("2. Part Time  [Kerja tidak tetap]            ");
@@ -193,7 +211,9 @@ public class MenuAdministrator
             System.out.println("4. Freelance  [Kerja sementara]              ");
             System.out.println("============================================= \n");
 
-            System.out.print("Status Kerja (1 - 4) = "); int inputStatusKerja = InputValue.nextInt(); InputValue.nextLine();
+            System.out.print("Status Kerja (1 - 4) = "); int inputStatusKerja = InputValue.nextInt(); 
+            InputValue.nextLine();
+
             if (inputStatusKerja == 1) {
                 statusKerja = "full time";
             }
@@ -208,7 +228,7 @@ public class MenuAdministrator
             }
 
             dataAkunAdministrator.setDataJadwalKerjaAdmin(new JadwalKerjaAdmin(jamMulaiKerja, jamSelesaiKerja, statusKerja, inputJumlahHariKerja));
-            App.osSystem_Pause();
+            App.osSystem_Pause(); System.out.println();
         }
         catch (ParseException e)
         {
@@ -218,16 +238,17 @@ public class MenuAdministrator
 
     static void tampilkanGajiKaryawan()
     {
+        // Tujuan = untuk menampilkan gaji karyawan dari Database.java
         Date jamMulaiKerjaKaryawan, jamSelesaiKerjaKaryawan;
         String statusKerja; Integer jumlahHariKerja;
-
         String mataUang = "Rp";
+
         System.out.println("3 >> Tampilkan Gaji Karyawan");
         System.out.println("---------------------------- \n");
 
         // Program akan bertanya apakah admin setuju ingin mengamati data gaji karyawan atau tidak
         System.out.println("Ada " + Database.accessDaftarKaryawan().size() + " akun karyawan yang masuk.");
-        System.out.print("Konfirmasi = "); String konfirmasi = InputValue.nextLine();
+        System.out.print("Konfirmasi = "); String konfirmasi = InputValue.nextLine(); System.out.println();
 
         if (konfirmasi.equals("ya") || konfirmasi.equals("yes") || konfirmasi.equals("iya"))
         {
@@ -235,10 +256,12 @@ public class MenuAdministrator
             // Apabila tidak ada akun karyawan, data gaji tidak dapat ditampilkan
             if (Database.accessDaftarKaryawan().size() == 0)
             {
-                System.out.println("Maaf, tidak ada akun karyawan yang terdaftar.");
+                System.out.println("---------------------------------------------   ");
+                System.out.println("i << AKSES DITOLAK                              ");
+                System.out.println("Maaf, tidak ada akun karyawan yang terdaftar.   ");
                 System.out.println("--------------------------------------------- \n");
 
-                App.osSystem_Pause(); interfaceMenu();
+                App.osSystem_Pause();
             }
 
             // Akan tetapi..
@@ -264,8 +287,10 @@ public class MenuAdministrator
                         System.out.println("ID Karyawan  = " + String.copyValueOf(Database.accessDaftarKaryawan().get(urutanDaftar).getDataRegistrasi().getNomorID()));
                         System.out.println("Nama Lengkap = " + Database.accessDaftarKaryawan().get(urutanDaftar).getDataIdentitasKaryawan().getnamaLengkap()); System.out.println();
                         
-                        System.out.println("Status Kerja = " + Database.accessDaftarKaryawan().get(urutanDaftar).getDataJadwalKerjaKaryawan().getStatusKerja());
-                        System.out.println("Total Gaji   = " + mataUang + Database.accessDaftarKaryawan().get(urutanDaftar).getdataPenghasilanKaryawan().calculate());
+                        System.out.println("Status Kerja = " + Database.accessDaftarKaryawan().get(urutanDaftar).getDataJadwalKerjaKaryawan().getStatusKerja().toUpperCase());
+
+                        PenghasilanKaryawan dataPenghasilanKaryawan = new PenghasilanKaryawan(Database.accessDaftarKaryawan().get(urutanDaftar));
+                        System.out.println("Total Gaji   = " + mataUang + dataPenghasilanKaryawan.calculate());
                         System.out.println("------------------------------------- \n");
                     }
 
@@ -273,11 +298,12 @@ public class MenuAdministrator
                 }
             }
         }
-        App.osSystem_Pause();
+        App.osSystem_Pause(); System.out.println();
     }
 
     static void ubahIdentitas()
     {
+        // Tujuan = Mengubah identitas admin
         boolean perubahanIdentitas = false;
         do
         {
@@ -302,7 +328,7 @@ public class MenuAdministrator
                     dataAkunAdministrator.getDataIdentitasAdmin().setNamaLengkap(inputNamaLengkapBaru);
                     perubahanIdentitas = true; break;
 
-                case 2: // Hanya ubah nomor HP saja
+                case 2: // Hanya ubah nomor HP saja, atau
                     System.out.println("Nomor HP (lama) = " + dataAkunAdministrator.getDataIdentitasAdmin().getnomorhp());
                     System.out.print("Nomor HP (baru) = "); String inputNomorHPBaru = InputValue.nextLine();
 
@@ -321,10 +347,12 @@ public class MenuAdministrator
                     System.out.println("Pilihan hanya dari 1 - 3");
             }
         } while (perubahanIdentitas == false);
+        App.osSystem_Pause(); System.out.println();
     }
 
     static void ubahJamKerja()
     {
+        // Tjuan = ubah jam kerja
         try
         {
             SimpleDateFormat sdf = new SimpleDateFormat("hh:mm");
@@ -346,6 +374,8 @@ public class MenuAdministrator
             System.out.println("------------------------------ \n");
 
             System.out.print("Kategori data yang diubah = "); int pilihan = InputValue.nextInt();
+            InputValue.nextLine(); System.out.println();
+
             switch (pilihan)
             {
                 case 1:
@@ -376,6 +406,7 @@ public class MenuAdministrator
                     System.out.println("4. Freelance  [Kerja sementara]              ");
                     System.out.println("=============================================");
                     System.out.print("Status Kerja yang Baru = "); int inputStatusKerja = InputValue.nextInt();
+                    InputValue.nextLine(); System.out.println();
 
                     switch (inputStatusKerja)
                     {
@@ -398,6 +429,7 @@ public class MenuAdministrator
                 default:
                     System.out.println("Maaf, pilihan Anda tidak sesuai.");
             }
+            App.osSystem_Pause(); System.out.println();
         }
         catch (ParseException e)
         {
@@ -407,27 +439,30 @@ public class MenuAdministrator
 
     static void tampilkanIdentitas()
     {
+        // Tjuan = menampilkan akun yang lengkap
         System.out.println("6 >> Tampilkan Identitas");
         System.out.println("------------------------ \n");
 
+        System.out.println("=============================================================");
         System.out.println("ID Administrator = " + String.copyValueOf(dataAkunAdministrator.getDataRegistrasi().getNomorID()));
         System.out.println("Nama Lengkap     = " + dataAkunAdministrator.getDataIdentitasAdmin().getNamaLengkap());
         System.out.println("Nomor HP         = " + dataAkunAdministrator.getDataIdentitasAdmin().getnomorhp());
-        System.out.println("Alamat e-mail    = " + dataAkunAdministrator.getDataIdentitasAdmin().getEmail());
-        System.out.println();
+        System.out.println("Alamat e-mail    = " + dataAkunAdministrator.getDataIdentitasAdmin().getEmail()); 
+        System.out.println("============================================================= \n");
         
         App.osSystem_Pause();
     }
 
     static void tampilkanJamKerja()
     {
-        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm");
+        // Tjuan = menampilkan jam kerja
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         System.out.println("7 >> Tampilkan Jam Kerja");
         System.out.println("------------------------ \n");
 
         System.out.println("=============================================================");
         System.out.println("ID Administrator = " + String.copyValueOf(dataAkunAdministrator.getDataRegistrasi().getNomorID()));
-        System.out.println("Status Kerja     = " + dataAkunAdministrator.getDataJadwalKerjaAdmin().getStatusKerja()); System.out.println();
+        System.out.println("Status Kerja     = " + dataAkunAdministrator.getDataJadwalKerjaAdmin().getStatusKerja().toUpperCase()); System.out.println();
 
         System.out.println("Jam Mulai Kerja               = " + sdf.format(dataAkunAdministrator.getDataJadwalKerjaAdmin().getJamMulaiKerja()));
         System.out.println("Jam Selesai Kerja             = " + sdf.format(dataAkunAdministrator.getDataJadwalKerjaAdmin().getJamSelesaiKerja()));
@@ -446,11 +481,13 @@ public class MenuAdministrator
         {
             System.out.println("==========================================================");
             System.out.println("Karyawan No. " + (urutanDaftar + 1) + ": ");
-            System.out.println("Nomor ID        = " + String.copyValueOf(Database.accessDaftarAdministrator().get(urutanDaftar).getDataRegistrasi().getNomorID()));
+            System.out.println("Nomor ID        = " + String.copyValueOf(Database.accessDaftarKaryawan().get(urutanDaftar).getDataRegistrasi().getNomorID()));
             System.out.println("Nama Lengkap    = " + Database.accessDaftarKaryawan().get(urutanDaftar).getDataIdentitasKaryawan().getnamaLengkap());
-            System.out.println("Status Kerja    = " + Database.accessDaftarKaryawan().get(urutanDaftar).getDataJadwalKerjaKaryawan().getStatusKerja());
+            System.out.println("Status Kerja    = " + Database.accessDaftarKaryawan().get(urutanDaftar).getDataJadwalKerjaKaryawan().getStatusKerja().toUpperCase());
             System.out.println("==========================================================");
         }
+
+        App.osSystem_Pause(); System.out.println();
     }
 
     static void tampilkanDataAdministrator()
@@ -464,9 +501,11 @@ public class MenuAdministrator
             System.out.println("Administrator No. " + (urutanDaftar + 1) + ": ");
             System.out.println("Nomor ID        = " + String.copyValueOf(Database.accessDaftarAdministrator().get(urutanDaftar).getDataRegistrasi().getNomorID()));
             System.out.println("Nama Lengkap    = " + Database.accessDaftarAdministrator().get(urutanDaftar).getDataIdentitasAdmin().getNamaLengkap());
-            System.out.println("Status Kerja    = " + Database.accessDaftarAdministrator().get(urutanDaftar).getDataJadwalKerjaAdmin().getStatusKerja());
+            System.out.println("Status Kerja    = " + Database.accessDaftarAdministrator().get(urutanDaftar).getDataJadwalKerjaAdmin().getStatusKerja().toUpperCase());
             System.out.println("==========================================================");
         }
+
+        App.osSystem_Pause(); System.out.println();
     }
 
     static void LogOut()
