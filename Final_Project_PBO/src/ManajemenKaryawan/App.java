@@ -22,40 +22,40 @@ public class App {
     { 
         interfaceMenu();
 
-        System.out.print("Pilihan menu: "); String pilihan = InputValue.nextLine();
-        String option = pilihan.toString(); navigateOptions(option);
+        System.out.print("Pilihan menu: "); String option = InputValue.nextLine();
+        navigateOptions(option);
     }
 
     static void interfaceMenu()
     {
-        System.out.println("==========================");
-        System.out.println("Employee Management System");
-        System.out.println("Final Project OOP 19IT2   ");
-        System.out.println("========================== \n");
+        System.out.println("================================   ");
+        System.out.println("Employee    Management    System   ");
+        System.out.println("    Final Project OOP 19 IT2       ");
+        System.out.println("================================ \n");
 
-        System.out.println("--------------------------   ");
-        System.out.println("1 >> Sign In                 ");
-        System.out.println("2 >> Log In                  ");
-        System.out.println("3 >> Sign Out                ");
-        System.out.println("4 >> About                   ");
-        System.out.println("0 >> Exit                    ");
-        System.out.println("-------------------------- \n");
+        System.out.println("--------------------------------   ");
+        System.out.println("1 >> Sign In                       ");
+        System.out.println("2 >> Log In                        ");
+        System.out.println("3 >> Sign Out                      ");
+        System.out.println("4 >> About                         ");
+        System.out.println("0 >> Exit                          ");
+        System.out.println("-------------------------------- \n");
     }
 
     public static void navigateOptions(String option)
     {
         // Program akan mendeteksi apa pilihan dari user
         if (option.equals("sign in") || option.equals("1")) {
-            SignIn();
+            SignIn(); main(argumentsList);
         }
         else if (option.equals("log in") || option.equals("2")) {
-            LogIn();
+            LogIn(); main(argumentsList);
         }
         else if (option.equals("sign out") || option.equals("3")) {
-            SignOut();
+            SignOut(); main(argumentsList);
         }
         else if (option.equals("about") || option.equals("4")) {
-            aboutProgram();
+            aboutProgram(); main(argumentsList);
         }
         else if (option.equals("exit") || option.equals("0")) {
             Exit();
@@ -81,6 +81,8 @@ public class App {
         System.out.println("1 >> Sign In \n");
 
         System.out.println("------------------------------");
+        System.out.println("i << INPUT FORMATTING          \n");
+
         System.out.println("\"01xxx\" = Akun Karyawan");
         System.out.println("\"02xxx\" = Akun Administrator");
         System.out.println("------------------------------ \n");
@@ -161,8 +163,7 @@ public class App {
             System.out.println("---------------------------------------\n");
         }
         
-        osSystem_Pause(); System.out.println(); 
-        main(argumentsList); // Sistem kembali ke menu
+        osSystem_Pause(); System.out.println();
     }
 
     private static void LogIn()
@@ -176,8 +177,7 @@ public class App {
 
             // Mula - mula, user menginput nomorID & password seperti biasa
             System.out.print("Nomor ID (existed) = "); strNomorID = InputValue.nextLine();
-            System.out.print("Password (existed) = "); strPassword = InputValue.nextLine(); 
-            System.out.println();
+            System.out.print("Password (existed) = "); strPassword = InputValue.nextLine(); System.out.println();
 
             // Program menanyakan user apakah betul - betul setuju dengan registrasi akun ini atau tidak
             System.out.print("Konfirmasi Log In? "); String konfirmasi = InputValue.nextLine();
@@ -191,8 +191,7 @@ public class App {
                 System.out.println("Silakan kembali ke menu awal.            ");
                 System.out.println("---------------------------------------\n");
 
-                osSystem_Pause(); 
-                main(argumentsList); return; // Kembali ke menu awal
+                osSystem_Pause(); System.out.println(); return; // Kembali ke menu awal
             }
 
             // Bila user TERIMA..
@@ -210,13 +209,14 @@ public class App {
 
                 // Akan tetapi..
                 // Bila data input SUDAH SESUAI, maka user bisa lanjut
-                else if (nomorID_isExist(strNomorID) && password_isExist(strPassword)) {
+                else if (nomorID_isExist(strNomorID) && password_isExist(strPassword)) 
+                {
+                    osSystem_Pause(); System.out.println();
                     break;
                 }
             }
         }
 
-        osSystem_Pause(); System.out.println();
         // arahkan user, apakah ia masuk ke MenuKaryawan.java OR MenuAdministrator.java
         navigateAccount(strNomorID);
     }
@@ -258,11 +258,11 @@ public class App {
         {
             for (int i = 0; i < Database.accessDaftarKaryawan().size(); i++) 
             {
-                char[] nomorID_LinkedList = Database.accessDaftarRegistrasi().get(i).getNomorID();
+                char[] nomorID_LinkedList = Database.accessDaftarKaryawan().get(i).getDataRegistrasi().getNomorID();
                 
                 if (Arrays.equals(nomorID_LinkedList, strNomorID.toCharArray())) {
                     MenuKaryawan.dataAkunKaryawan = Database.accessDaftarKaryawan().get(i);
-                    MenuKaryawan.interfaceMenu();
+                    MenuKaryawan.interfaceMenu(); return;
                 }
             }
         }
@@ -271,11 +271,11 @@ public class App {
         {
             for (int i = 0; i < Database.accessDaftarAdministrator().size(); i++)
             {
-                char[] nomorID_LinkedList = Database.accessDaftarRegistrasi().get(i).getNomorID();
+                char[] nomorID_LinkedList = Database.accessDaftarAdministrator().get(i).getDataRegistrasi().getNomorID();
                 
                 if (Arrays.equals(nomorID_LinkedList, strNomorID.toCharArray())) {
                     MenuAdministrator.dataAkunAdministrator = Database.accessDaftarAdministrator().get(i);
-                    MenuAdministrator.interfaceMenu();
+                    MenuAdministrator.interfaceMenu(); return;
                 }
             }
         }
@@ -297,7 +297,7 @@ public class App {
             System.out.println("Maaf, TIDAK ADA akun yang diregistrasi.");
             System.out.println("--------------------------------------- \n");
 
-            osSystem_Pause(); main(argumentsList); return;
+            osSystem_Pause(); return;
         }
 
         // Bila sudah ADA minimal 1 akun yang didaftar..
@@ -326,7 +326,7 @@ public class App {
                     System.out.println("Silakan kembali ke menu awal.");
                     System.out.println("----------------------------- \n");
 
-                    osSystem_Pause(); main(argumentsList); return;
+                    osSystem_Pause(); return;
                 }
                 
                 // Bila user TERIMA..
@@ -382,73 +382,86 @@ public class App {
                             System.out.print("Nomor ID yang ingin dihapus = "); inputNomorID = InputValue.nextLine();
                             System.out.print("Password yang ingin dihapus = "); inputPassword = InputValue.nextLine(); System.out.println();
 
-                            // Nantinya, program akan cek apakah data tersebut pernah diregistrasi di Database.java atau tidak
-                            for (int i = 0; i < Database.accessDaftarRegistrasi().size(); i++)
+                            System.out.print("Anda yakin ingin menghapus akun ini? "); String konfirmasiKembali = InputValue.nextLine();
+                            System.out.println();
+
+                            if (confirmation(konfirmasiKembali))
                             {
-                                nomorIDDatabase = String.copyValueOf(Database.accessDaftarRegistrasi().get(i).getNomorID());
-                                passwordDatabase = String.copyValueOf(Database.accessDaftarRegistrasi().get(i).getPassword());
-                                indeksTerakhir = Database.accessDaftarRegistrasi().size() - 1;
-
-                                // Kalau data sudah teregistrasi, maka user dapat menghapus akun yang bersangkutan
-                                if (nomorIDDatabase.equals(inputNomorID) && passwordDatabase.equals(inputPassword)) 
+                                for (int i = 0; i < Database.accessDaftarRegistrasi().size(); i++)
                                 {
-                                    // Bila akun yang terhapus berstatus "Karyawan", data Karyawan terkait juga akan ikut terhapus
-                                    if (inputNomorID.substring(0, 2).equals("01"))
-                                    {
-                                        for (int j = 0; j < Database.accessDaftarKaryawan().size(); j++)
-                                        {
-                                            nomorIDDatabase = String.copyValueOf(Database.accessDaftarKaryawan().get(j).getDataRegistrasi().getNomorID());
-                                            passwordDatabase = String.copyValueOf(Database.accessDaftarKaryawan().get(j).getDataRegistrasi().getPassword());
+                                    nomorIDDatabase = String.copyValueOf(Database.accessDaftarRegistrasi().get(i).getNomorID());
+                                    passwordDatabase = String.copyValueOf(Database.accessDaftarRegistrasi().get(i).getPassword());
+                                    indeksTerakhir = Database.accessDaftarRegistrasi().size() - 1;
 
-                                            if (nomorIDDatabase.equals(inputNomorID) && passwordDatabase.equals(inputPassword))
+                                    // Kalau data sudah teregistrasi, maka user dapat menghapus akun yang bersangkutan
+                                    if (nomorIDDatabase.equals(inputNomorID) && passwordDatabase.equals(inputPassword)) 
+                                    {
+                                        // Bila akun yang terhapus berstatus "Karyawan", data Karyawan terkait juga akan ikut terhapus
+                                        if (inputNomorID.substring(0, 2).equals("01"))
+                                        {
+                                            for (int j = 0; j < Database.accessDaftarKaryawan().size(); j++)
                                             {
-                                                Database.accessDaftarRegistrasi().remove(i);
-                                                Database.accessDaftarKaryawan().remove(j);
-                                                dataTerhapus = true; break;
+                                                nomorIDDatabase = String.copyValueOf(Database.accessDaftarKaryawan().get(j).getDataRegistrasi().getNomorID());
+                                                passwordDatabase = String.copyValueOf(Database.accessDaftarKaryawan().get(j).getDataRegistrasi().getPassword());
+
+                                                if (nomorIDDatabase.equals(inputNomorID) && passwordDatabase.equals(inputPassword))
+                                                {
+                                                    Database.accessDaftarRegistrasi().remove(i);
+                                                    Database.accessDaftarKaryawan().remove(j);
+                                                    dataTerhapus = true; break;
+                                                }
                                             }
                                         }
-                                    }
 
-                                    // Bila akun tersebut berstatus "Administrator", data Admin terkait juga akan ikut terhapus
-                                    else if (inputNomorID.substring(0, 2).equals("02"))
-                                    {
-                                        for (int k = 0; k < Database.accessDaftarAdministrator().size(); k++)
+                                        // Bila akun tersebut berstatus "Administrator", data Admin terkait juga akan ikut terhapus
+                                        else if (inputNomorID.substring(0, 2).equals("02"))
                                         {
-                                            nomorIDDatabase = String.copyValueOf(Database.accessDaftarAdministrator().get(k).getDataRegistrasi().getNomorID());
-                                            passwordDatabase = String.copyValueOf(Database.accessDaftarAdministrator().get(k).getDataRegistrasi().getPassword());
-
-                                            if (nomorIDDatabase.equals(inputNomorID) && passwordDatabase.equals(inputPassword))
+                                            for (int k = 0; k < Database.accessDaftarAdministrator().size(); k++)
                                             {
-                                                Database.accessDaftarRegistrasi().remove(i);
-                                                Database.accessDaftarAdministrator().remove(k);
-                                                dataTerhapus = true; break;
+                                                nomorIDDatabase = String.copyValueOf(Database.accessDaftarAdministrator().get(k).getDataRegistrasi().getNomorID());
+                                                passwordDatabase = String.copyValueOf(Database.accessDaftarAdministrator().get(k).getDataRegistrasi().getPassword());
+
+                                                if (nomorIDDatabase.equals(inputNomorID) && passwordDatabase.equals(inputPassword))
+                                                {
+                                                    Database.accessDaftarRegistrasi().remove(i);
+                                                    Database.accessDaftarAdministrator().remove(k);
+                                                    dataTerhapus = true; break;
+                                                }
                                             }
                                         }
+                                        break;
                                     }
-                                    break;
-                                }
 
-                                // Kalau tidak ada, Sign Out tidak jadi dilakukan
-                                else if ((!nomorIDDatabase.equals(inputNomorID) || !passwordDatabase.equals(inputPassword)) && i == indeksTerakhir)
-                                {
-                                    System.out.println("Maaf, Akun Anda tidak ditemukan!");
-                                    System.out.println("Silakan cek nomorID dan password akun Anda.");
-                                    System.out.println("=========================================== \n");
+                                    // Kalau tidak ada, Sign Out tidak jadi dilakukan
+                                    else if ((!nomorIDDatabase.equals(inputNomorID) || !passwordDatabase.equals(inputPassword)) && i == indeksTerakhir)
+                                    {
+                                        System.out.println("-------------------------------------------   ");
+                                        System.out.println("Maaf, Akun Anda tidak ditemukan!              ");
+                                        System.out.println("Silakan cek nomorID dan password akun Anda.   ");
+                                        System.out.println("------------------------------------------- \n");
+                                    }
                                 }
+                            }
+                            else if (!confirmation(konfirmasiKembali))
+                            {
+                                System.out.println("----------------------------------------");
+                                System.out.println("Sign Out akun DIBATALKAN                ");
+                                System.out.println("Silakan mulai proses Sign Out dari awal.");
+                                System.out.println("---------------------------------------- \n");
                             }
                         }
                     }
                 }  
             } while (dataTerhapus == false);
 
-            System.out.println("----------------------------------------------------");
+            System.out.println("----------------------------------------------------   ");
             System.out.println("i << Sign Out Completed                              \n");
 
-            System.out.println(inputNomorID + " telah DIHAPUS dari program.");
+            System.out.println(inputNomorID + " telah DIHAPUS dari program.            ");
             System.out.println("Penanggung Jawab = " + inputNomorIDPenanggungJawab);
             System.out.println("---------------------------------------------------- \n");
 
-            osSystem_Pause(); main(argumentsList); 
+            osSystem_Pause();
         }
     }
 
@@ -476,8 +489,8 @@ public class App {
                 System.out.println("-------------- \n");
 
                 System.out.println("Employee Management System ialah Software yang digunakan dalam dunia kerja.");
-                System.out.println("Sesuai namanya, Employee Management System hadir untuk memenuhi kebutuhan kantor, terutama karyawan"); 
-                System.out.println();
+                System.out.println("Sesuai namanya, Employee Management System hadir untuk memenuhi kebutuhan kantor, terutama karyawan");
+                System.out.println(); osSystem_Pause();
             }
             else if (pilihan.equals("b") || pilihan.equals("B"))
             {
@@ -485,10 +498,10 @@ public class App {
                 System.out.println("================ \n");
 
                 System.out.print("1. Albert Cenderawan   (03082190015) 19IT2 Universitas Pelita Harapan Medan "); InputValue.nextLine();
-                System.out.print("2. Harris Siaputra     (03082190015) 19IT2 Universitas Pelita Harapan Medan "); InputValue.nextLine();
-                System.out.print("3. Hubert Daniel Rusli (03082190015) 19IT2 Universitas Pelita Harapan Medan "); InputValue.nextLine();
-                System.out.print("4. Wilbert Khosasi     (03082190015) 19IT2 Universitas Pelita Harapan Medan "); InputValue.nextLine();
-                System.out.println();
+                System.out.print("2. Harris Siaputra     (03082190009) 19IT2 Universitas Pelita Harapan Medan "); InputValue.nextLine();
+                System.out.print("3. Hubert Daniel Rusli (03082190024) 19IT2 Universitas Pelita Harapan Medan "); InputValue.nextLine();
+                System.out.print("4. Wilbert Khosasi     (03082190019) 19IT2 Universitas Pelita Harapan Medan "); InputValue.nextLine();
+                System.out.println(); osSystem_Pause();
             }
             else if (pilihan.equals("c") || pilihan.equals("C"))
             {
@@ -497,13 +510,13 @@ public class App {
 
                 System.out.print("1. Ade Maulana (Object Oriented Programming Lecturer) Universitas Pelita Harapan Medan "); InputValue.nextLine();
                 System.out.print("2. GitHub (WilbertK1, HarrisSiaputra, Dev-Mediane) "); InputValue.nextLine();
-                System.out.println();
+                System.out.println(); osSystem_Pause();
             }
             else
             {
                 System.out.print("Anda ingin keluar ke menu? "); String konfirmasi = InputValue.nextLine();
                 if (confirmation(konfirmasi)) {
-                    main(argumentsList); break;
+                    break;
                 }
             }
         }
@@ -516,25 +529,26 @@ public class App {
         System.out.println("====================");
         System.out.println("0 >> Exit \n");
 
-        System.out.println("------------------------------------------");
-        System.out.println("WARNING >> DANGER ZONE                    ");
-        System.out.println("Semua data akan terhapus bila Anda keluar.");
-        System.out.println("Tentukan konfirmasi Anda saat ini.        \n");
-        System.out.println("------------------------------------------");
+        System.out.println("--------------------------------------------------  ");
+        System.out.println("WARNING >> DANGER ZONE                              ");
+        System.out.println("Semua data akan terhapus bila Anda KELUAR program.  ");
+        System.out.println("--------------------------------------------------\n");
 
         System.out.print("Apakah Anda ingin keluar dari program ini? "); String konfirmasi = InputValue.nextLine();
         System.out.println();
 
-        if (konfirmasi.equals("ya") || konfirmasi.equals("yes"))
+        if (confirmation(konfirmasi))
         {
             Database.resetDaftarAdmin();
             Database.resetDaftarKaryawan();
             Database.resetDaftarRegistrasi();
-            System.out.println("====================================== \n");
+
+            System.out.println("=============================================");
+            System.out.println("Terima Kasih telah menggunakan program ini!  ");
+            System.out.println("Have a Good Day! -- @EmployeeManagementSystem");
+            System.out.println("============================================= \n");
         }
-        else
-        {
-            osSystem_Pause(); System.out.println("====================================== \n");
+        else {
             main(argumentsList);
         }
     }
@@ -548,16 +562,16 @@ public class App {
     public static boolean confirmation(String inputKonfirmasi)
     {
         String[] agree = {"ya", "iya", "y", "yes", "yoi", "yeah"};
-        String[] disagree = {"tidak", "no", "t", "n", "nggak", "nope", "not", "x"};
+        String[] disagree = {"tidak", "no", "t", "n", "nggak", "nope", "ngga", "not", "x", "g"};
 
         for (int i = 0; i < agree.length; i++) {
-            if (inputKonfirmasi.equals(agree[i])) {
+            if (inputKonfirmasi.toLowerCase().equals(agree[i])) {
                 return true;
             }
         }
 
         for (int j = 0; j < disagree.length; j++) {
-            if (inputKonfirmasi.equals(disagree[j])) {
+            if (inputKonfirmasi.toLowerCase().equals(disagree[j])) {
                 return false;
             }
         }
