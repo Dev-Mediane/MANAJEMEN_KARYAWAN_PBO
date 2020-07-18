@@ -17,31 +17,38 @@ public class MenuAdministrator
 
     static void interfaceMenu()
     {
-        System.out.println("---------------------------------------------------");
-        System.out.println("Welcome, " + String.copyValueOf(dataAkunAdministrator.getDataRegistrasi().getNomorID()) + "!");
-        System.out.println("---------------------------------------------------");
+        try
+        {
+            System.out.println("---------------------------------------------------");
+            System.out.println("Welcome to Administrator Menu, " + String.copyValueOf(dataAkunAdministrator.getDataRegistrasi().getNomorID()) + "!");
+            System.out.println("---------------------------------------------------");
 
-        System.out.println("===========================================  ");
-        System.out.println("1  >> Input Identitas                        ");
-        System.out.println("2  >> Input Jam Kerja                        ");
-        System.out.println("3  >> Tampilkan Gaji Karyawan                ");
-        System.out.println("4  >> Ubah Identitas                         ");
-        System.out.println("5  >> Ubah Jam Kerja                         ");
-        System.out.println("6  >> Tampilkan Identitas                    ");
-        System.out.println("7  >> Tampilkan Jam Kerja                  \n");
+            System.out.println("===========================================  ");
+            System.out.println("1  >> Input Identitas                        ");
+            System.out.println("2  >> Input Jam Kerja                        ");
+            System.out.println("3  >> Tampilkan Gaji Karyawan                ");
+            System.out.println("4  >> Ubah Identitas                         ");
+            System.out.println("5  >> Ubah Jam Kerja                         ");
+            System.out.println("6  >> Tampilkan Identitas                    ");
+            System.out.println("7  >> Tampilkan Jam Kerja                  \n");
 
-        System.out.println("8  >> Tampilkan Data Karyawan                ");
-        System.out.println("9  >> Tampilkan Data Administrator         \n");
+            System.out.println("8  >> Tampilkan Data Karyawan                ");
+            System.out.println("9  >> Tampilkan Data Administrator         \n");
 
-        System.out.println("10 >> Cari Karyawan                          ");
-        System.out.println("11 >> Cari Admin                             ");
-        System.out.println("12 >> Cek Eksistensi Akun                  \n");
-        
-        System.out.println("0  >> Log Out                                ");
-        System.out.println("===========================================\n");
+            System.out.println("10 >> Cari Karyawan                          ");
+            System.out.println("11 >> Cari Admin                             ");
+            System.out.println("12 >> Cek Eksistensi Akun                  \n");
+            
+            System.out.println("0  >> Log Out                                ");
+            System.out.println("===========================================\n");
 
-        System.out.print("Pilihan Menu: "); String option = InputValue.nextLine();
-        System.out.println(); navigateOptions(option);
+            System.out.print("Pilihan Menu: "); String option = InputValue.nextLine();
+            System.out.println(); navigateOptions(option);
+        }
+        catch (Exception e)
+        {
+            System.out.println("Maaf, error");
+        }
     }
 
     static void navigateOptions(String option)
@@ -100,17 +107,17 @@ public class MenuAdministrator
         }
         else if (option.equals("cari karyawan") || option.equals("10"))
         {
-            cariKaryawan();
+            //cariKaryawan();
             interfaceMenu();
         }
         else if (option.equals("cari admin") || option.equals("11"))
         {
-            cariAdmin();
+            //cariAdmin();
             interfaceMenu();
         }
         else if (option.equals("cek eksistensi akun") || option.equals("12"))
         {
-            cekEksistensiAkun();
+            //cekEksistensiAkun();
             interfaceMenu();
         }
         else if (option.equals("log out") || option.equals("0"))
@@ -211,25 +218,59 @@ public class MenuAdministrator
 
     static void tampilkanGajiKaryawan()
     {
+        Date jamMulaiKerjaKaryawan, jamSelesaiKerjaKaryawan;
+        String statusKerja; Integer jumlahHariKerja;
+
         String mataUang = "Rp";
         System.out.println("3 >> Tampilkan Gaji Karyawan");
         System.out.println("---------------------------- \n");
 
+        // Program akan bertanya apakah admin setuju ingin mengamati data gaji karyawan atau tidak
         System.out.println("Ada " + Database.accessDaftarKaryawan().size() + " akun karyawan yang masuk.");
         System.out.print("Konfirmasi = "); String konfirmasi = InputValue.nextLine();
 
         if (konfirmasi.equals("ya") || konfirmasi.equals("yes") || konfirmasi.equals("iya"))
         {
-            for (int urutanDaftar = 0; urutanDaftar < Database.accessDaftarKaryawan().size(); urutanDaftar++)
+            // Ada syaratnya..
+            // Apabila tidak ada akun karyawan, data gaji tidak dapat ditampilkan
+            if (Database.accessDaftarKaryawan().size() == 0)
             {
-                System.out.println("EMPLOYEE " + (urutanDaftar + 1) + ":");
-                System.out.println("---------------------------------------------");
-                System.out.println("Nomor ID        = " + Database.accessDaftarKaryawan().get(urutanDaftar).getDataRegistrasi().getNomorID().toString());
-                System.out.println("Nama Lengkap    = " + Database.accessDaftarKaryawan().get(urutanDaftar).getDataIdentitasKaryawan().getnamaLengkap());
-                System.out.println("Status Kerja    = " + Database.accessDaftarKaryawan().get(urutanDaftar).getDataJadwalKerjaKaryawan().getStatusKerja()); System.out.println();
-
-                System.out.println("Total Gaji Bersih = " + mataUang + Database.accessDaftarKaryawan().get(urutanDaftar).getdataPenghasilanKaryawan().calculate(Database.accessDaftarKaryawan().get(urutanDaftar)));
+                System.out.println("Maaf, tidak ada akun karyawan yang terdaftar.");
                 System.out.println("--------------------------------------------- \n");
+
+                App.osSystem_Pause(); interfaceMenu();
+            }
+
+            // Akan tetapi..
+            // Kalau ada akun Karyawan, data gaji dapat ditampilkan
+            else if (Database.accessDaftarKaryawan().size() > 0)
+            {
+                for (int urutanDaftar = 0; urutanDaftar < Database.accessDaftarKaryawan().size(); urutanDaftar++)
+                {
+                    // Data karyawan memiliki jadwal kerja yang telah disusun oleh user
+                    // Dengan adanya jadwal kerja, sistem dapat memproses gaji karyawan
+                    jamMulaiKerjaKaryawan = Database.accessDaftarKaryawan().get(urutanDaftar).getDataJadwalKerjaKaryawan().getJamMulaiKerja();
+                    jamSelesaiKerjaKaryawan = Database.accessDaftarKaryawan().get(urutanDaftar).getDataJadwalKerjaKaryawan().getJamSelesaiKerja();
+                    jumlahHariKerja = Database.accessDaftarKaryawan().get(urutanDaftar).getDataJadwalKerjaKaryawan().getJumlahHariKerja();
+                    statusKerja = Database.accessDaftarKaryawan().get(urutanDaftar).getDataJadwalKerjaKaryawan().getStatusKerja();
+
+                    // Cek data karyawan, apakah jadwal kerja karyawan sudah tersusun atau tidak
+                    // Bila semua data jadwal kerja karyawan (misalnya jamMulaiKerja) sudah terisi,
+                    // karyawan dapat mengamati gaji mereka
+                    if (jamMulaiKerjaKaryawan != null && jamSelesaiKerjaKaryawan != null && jumlahHariKerja != null && statusKerja != null)
+                    {
+                        System.out.println("EMPLOYEE " + (urutanDaftar + 1) + ":");
+                        System.out.println("-------------------------------------");
+                        System.out.println("ID Karyawan  = " + String.copyValueOf(Database.accessDaftarKaryawan().get(urutanDaftar).getDataRegistrasi().getNomorID()));
+                        System.out.println("Nama Lengkap = " + Database.accessDaftarKaryawan().get(urutanDaftar).getDataIdentitasKaryawan().getnamaLengkap()); System.out.println();
+                        
+                        System.out.println("Status Kerja = " + Database.accessDaftarKaryawan().get(urutanDaftar).getDataJadwalKerjaKaryawan().getStatusKerja());
+                        System.out.println("Total Gaji   = " + mataUang + Database.accessDaftarKaryawan().get(urutanDaftar).getdataPenghasilanKaryawan().calculate());
+                        System.out.println("------------------------------------- \n");
+                    }
+
+                    // Bila karyawan tidak menginput jam/jadwal kerjanya, data gaji tidak akan ditampilkan
+                }
             }
         }
         App.osSystem_Pause();
@@ -428,10 +469,9 @@ public class MenuAdministrator
         }
     }
 
-    static void 
-
     static void LogOut()
     {
+        // Menu ini berguna bagi user untuk Log Out (keluar dari Menu Administrator)
         String[] argumentsList = {"1", "2", "3"};
         System.out.println("0 >> Log Out");
         System.out.println("------------ \n");
