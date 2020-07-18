@@ -1,4 +1,5 @@
 package ManajemenKaryawan;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
 import ManajemenKaryawan.AkunKaryawan;
@@ -15,9 +16,9 @@ public class MenuKaryawan
 
     static void interfaceMenu()
     {
-        System.out.println("------------------------------  ");
+        System.out.println("----------------------------------------------  ");
         System.out.println("Welcome to Employee Menu, " + String.copyValueOf(dataAkunKaryawan.getDataRegistrasi().getNomorID()) + "!");
-        System.out.println("------------------------------\n");
+        System.out.println("----------------------------------------------\n");
 
         System.out.println("==============================  ");
         System.out.println("1 >> Input Identitas            ");
@@ -60,6 +61,14 @@ public class MenuKaryawan
         else if (pilihan.equals("log out") || pilihan.equals("0")) {
             LogOut();
         }
+        else
+        {
+            System.out.println("==================================================");
+            System.out.println("Maaf, input Anda tidak sesuai dengan pilihan Menu.");
+            System.out.println("Silakan kembali ke halaman menu Karyawan.         ");
+            System.out.println("================================================== \n");
+            App.osSystem_Pause(); System.out.println(); interfaceMenu();
+        }
     }
 
     static void inputIdentitas()
@@ -85,7 +94,7 @@ public class MenuKaryawan
         // Hal yang sama juga terjadi dalam menu "Input Jam Kerja"
         try
         {
-            SimpleDateFormat sdf = new SimpleDateFormat("kk:mm");
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
             String inputJamMulaiKerja, inputJamSelesaiKerja, statusKerja = ""; 
             Integer inputJumlahHariKerja = null;
 
@@ -102,13 +111,13 @@ public class MenuKaryawan
                 System.out.println("i << Attention - Formatting");
                 System.out.println("Format jam = (hh:mm). Misalnya 09:55");
                 System.out.println("==================================================== \n");
-                App.osSystem_Pause();
+                App.osSystem_Pause(); System.out.println();
 
-                System.out.print("Jumlah hari kerja         = "); inputJumlahHariKerja = InputValue.nextInt();  // Masukkan jumlah hari kerja dalam sebulan
+                System.out.print("Jumlah hari kerja (per bulan) = "); inputJumlahHariKerja = InputValue.nextInt();  // Masukkan jumlah hari kerja dalam sebulan
                 InputValue.nextLine();
                 
-                System.out.print("Jam mulai kerja (hh:mm)   = "); inputJamMulaiKerja = InputValue.nextLine();   // Masukkan jam berapa mulai kerja
-                System.out.print("Jam selesai kerja (hh:mm) = "); inputJamSelesaiKerja = InputValue.nextLine(); // Masukkan jam berapa selesai kerja
+                System.out.print("Jam mulai kerja (hh:mm)       = "); inputJamMulaiKerja = InputValue.nextLine();   // Masukkan jam berapa mulai kerja
+                System.out.print("Jam selesai kerja (hh:mm)     = "); inputJamSelesaiKerja = InputValue.nextLine(); // Masukkan jam berapa selesai kerja
                 System.out.println();
 
                 // Bila data berformat "hh:mm" dari user TIDAK SESUAI dengan format, maka user tidak bisa lanjut
@@ -117,7 +126,7 @@ public class MenuKaryawan
                     System.out.println("Input Anda memiliki kesalahan format.");
                     System.out.println("Baca \"Attention\" sebelum menginput data waktu.");
                     System.out.println("------------------------------------------------ \n"); 
-                    App.osSystem_Pause();
+                    App.osSystem_Pause(); System.out.println();
                 }
 
                 // bila data berformat "hh:mm" dari user SESUAI dengan format, maka user bisa lanjut
@@ -182,9 +191,11 @@ public class MenuKaryawan
         // Apabila belum, karyawan terkait tidak dapat mengamati gajinya
         if (jamMulaiKerjaTerkait == null || jamSelesaiKerjaTerkait == null || jumlahHariKerjaTerkait == null || statusKerjaTerkait == null)
         {
+            System.out.println("-------------------------------------");
             System.out.println("Maaf, Anda belum menginput jam kerja.");
+            System.out.println("Silakan input Jam Kerja di menu ini.");
             System.out.println("------------------------------------- \n");
-            App.osSystem_Pause(); interfaceMenu();
+            App.osSystem_Pause(); return;
         }
 
         // Bagaimana kalau data Jam Kerja sudah diisi oleh user sebelumnya?
@@ -192,11 +203,10 @@ public class MenuKaryawan
         // lalu mengirimkan total gaji karyawan di sini
         else if (jamMulaiKerjaTerkait != null && jamSelesaiKerjaTerkait != null && jumlahHariKerjaTerkait != null && statusKerjaTerkait != null)
         {
-            PenghasilanKaryawan dataPenghasilanKaryawan = new PenghasilanKaryawan();
-            dataPenghasilanKaryawan.dataAkunKaryawan = dataAkunKaryawan;
+            PenghasilanKaryawan dataPenghasilanKaryawan = new PenghasilanKaryawan(dataAkunKaryawan);
 
-            dataAkunKaryawan.getdataPenghasilanKaryawan().display();
-            App.osSystem_Pause(); interfaceMenu();
+            dataPenghasilanKaryawan.display();
+            App.osSystem_Pause(); return;
         }
     }
 
@@ -259,8 +269,10 @@ public class MenuKaryawan
                     System.out.println("Pilihan yang Anda input tidak tertera.");
                     System.out.println("Pilihan hanya dari 1 - 3");
                     System.out.println("-------------------------------------- \n");
+                    App.osSystem_Pause(); System.out.println();
             }
         } while (perubahanIdentitas == false);
+        App.osSystem_Pause(); System.out.println();
     }
 
     static void ubahJamKerja()
@@ -269,31 +281,32 @@ public class MenuKaryawan
         // Dengan mengubah jam kerjanya, otomatis nilai gaji yang diterima juga akan berubah
         try
         {
-            SimpleDateFormat sdf = new SimpleDateFormat("kk:mm");
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
             String inputJamMulaiKerja, inputJamSelesaiKerja; 
             Integer inputJumlahHariKerja = null;
             
-            System.out.println("5 >> Ubah Jam Kerja");
-            System.out.println("-------------------- \n");
+            System.out.println("5 >> Ubah Jam Kerja   ");
+            System.out.println("------------------- \n");
 
-            System.out.println("====================================================");
-            System.out.println("i << Attention - Formatting");
-            System.out.println("Format jam = (hh:mm). Misalnya 09:55");
-            System.out.println("====================================================");
-            System.out.println();
+            System.out.println("------------------------------  ");
+            System.out.println("1. Jam Masuk Kerja              ");
+            System.out.println("2. Jam Selesai Kerja            ");
+            System.out.println("3. Jumlah Hari Kerja per Bulan  ");
+            System.out.println("4. Status Kerja                 ");
+            System.out.println("------------------------------\n");
 
-            System.out.println("------------------------------");
-            System.out.println("1. Jam Masuk Kerja");
-            System.out.println("2. Jam Selesai Kerja");
-            System.out.println("3. Jumlah Hari Kerja per Bulan");
-            System.out.println("4. Status Kerja");
-            System.out.println("------------------------------ \n");
+            System.out.print("Kategori data yang diubah = "); int pilihan = InputValue.nextInt(); 
+            InputValue.nextLine(); System.out.println();
 
-            System.out.print("Kategori data yang diubah = "); int pilihan = InputValue.nextInt();
             switch (pilihan)
             {
                 // User dapat mengubah jam berapa ia masuk kerja
                 case 1:
+                    System.out.println("====================================================");
+                    System.out.println("i << Attention - Formatting                         ");
+                    System.out.println("Format jam = (hh:mm). Misalnya 19:12                ");
+                    System.out.println("==================================================== \n");
+
                     System.out.println("Input lama (HH:MM) = " + sdf.format(dataAkunKaryawan.getDataJadwalKerjaKaryawan().getJamMulaiKerja()));
                     System.out.print("Input baru (HH:MM) = "); inputJamMulaiKerja = InputValue.nextLine();
 
@@ -303,6 +316,11 @@ public class MenuKaryawan
 
                 // User dapat mengubah jam berapa ia selesai kerja
                 case 2:
+                    System.out.println("====================================================");
+                    System.out.println("i << Attention - Formatting                         ");
+                    System.out.println("Format jam = (hh:mm). Misalnya 12:47                ");
+                    System.out.println("==================================================== \n");
+
                     System.out.println("Input lama (HH:MM) = " + sdf.format(dataAkunKaryawan.getDataJadwalKerjaKaryawan().getJamSelesaiKerja()));
                     System.out.print("Input baru (HH:MM) = "); inputJamSelesaiKerja = InputValue.nextLine();
 
@@ -326,7 +344,8 @@ public class MenuKaryawan
                     System.out.println("3. Internship [Magang]                       ");
                     System.out.println("4. Freelance  [Kerja sementara]              ");
                     System.out.println("=============================================");
-                    System.out.print("Status Kerja yang Baru = "); int inputStatusKerja = InputValue.nextInt();
+                    System.out.print("Status Kerja yang Baru = "); int inputStatusKerja = InputValue.nextInt(); 
+                    InputValue.nextLine(); System.out.println();
 
                     switch (inputStatusKerja)
                     {
@@ -349,8 +368,9 @@ public class MenuKaryawan
                 default:
                     System.out.println("Maaf, pilihan Anda tidak sesuai.");
             }
+            App.osSystem_Pause(); System.out.println();
         }
-        catch (ParseException e)
+        catch (Exception e)
         {
             System.out.println("Go ahead.");
         }
@@ -362,40 +382,42 @@ public class MenuKaryawan
         System.out.println("6 >> Tampilkan Identitas");
         System.out.println("------------------------ \n");
 
+        System.out.println("==================================================");
         System.out.println("Nama Lengkap     = " + dataAkunKaryawan.getDataIdentitasKaryawan().getnamaLengkap());        
-        System.out.println("Nomor HP         = " + String.copyValueOf(dataAkunKaryawan.getDataIdentitasKaryawan().getNomorHP())); System.out.println();
-
+        System.out.println("Nomor HP         = " + String.copyValueOf(dataAkunKaryawan.getDataIdentitasKaryawan().getNomorHP()));
         System.out.println("Alamat e-mail    = " + dataAkunKaryawan.getDataIdentitasKaryawan().getemail());
-        System.out.println("Jumlah kendaraan = " + dataAkunKaryawan.getDataIdentitasKaryawan().getkendaraan()); System.out.println();
-        
-        App.osSystem_Pause();
+        System.out.println("Jumlah kendaraan = " + dataAkunKaryawan.getDataIdentitasKaryawan().getkendaraan());
+        System.out.println("================================================== \n");
+
+        App.osSystem_Pause(); System.out.println();
     }
 
     static void tampilkanJamKerja()
     {
-        // Dalam menu ini, identitas administrator dalam menu ini akan ditampilkan
-        SimpleDateFormat sdf = new SimpleDateFormat("kk:mm");
+        // Dalam menu ini, jadwal kerja karyawan dalam menu ini akan ditampilkan
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         System.out.println(" >> Tampilkan Jam Kerja");
         System.out.println("----------------------- \n");
 
-        System.out.println("Nama Lengkap    = " + dataAkunKaryawan.getDataIdentitasKaryawan().getnamaLengkap());
-        System.out.println("Status Kerja    = " + dataAkunKaryawan.getDataJadwalKerjaKaryawan().getStatusKerja()); System.out.println();
-
+        System.out.println("==================================================");
+        System.out.println("Nama Lengkap                = " + dataAkunKaryawan.getDataIdentitasKaryawan().getnamaLengkap());
+        System.out.println("Status Kerja                = " + dataAkunKaryawan.getDataJadwalKerjaKaryawan().getStatusKerja().toUpperCase());
         System.out.println("Jam Mulai Kerja             = " + sdf.format(dataAkunKaryawan.getDataJadwalKerjaKaryawan().getJamMulaiKerja()));
         System.out.println("Jam Selesai Kerja           = " + sdf.format(dataAkunKaryawan.getDataJadwalKerjaKaryawan().getJamSelesaiKerja()));
         System.out.println("Jumlah Hari Kerja per Bulan = " + dataAkunKaryawan.getDataJadwalKerjaKaryawan().getJumlahHariKerja());
+        System.out.println("================================================== \n");
 
-        App.osSystem_Pause();
+        App.osSystem_Pause(); System.out.println();
     }
 
     static void LogOut()
     {
         // Menu ini berguna bagi user untuk Log Out (keluar dari Menu Karyawan)
         String[] argumentsList = {"1", "2", "3"};
-        System.out.println("=======================");
-        System.out.println("0 >> Log Out");
+        System.out.println("0 >> Log Out              ");
+        System.out.println("======================= \n");
 
-        System.out.print("Please select any key to continue... "); InputValue.nextLine();
-        System.out.println(); App.main(argumentsList);
+        App.osSystem_Pause(); System.out.println(); 
+        App.main(argumentsList);
     }
 }
